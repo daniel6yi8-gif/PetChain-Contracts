@@ -8,6 +8,13 @@ on:
 
 permissions: read-all
 
+# Supply-chain hardening (Issue #1228): every third-party action below is
+# pinned to an immutable 40-character commit SHA rather than a floating tag.
+# The human-readable release is kept as a trailing comment so upgrades stay
+# reviewable. Update ownership: the repository maintainers on the security
+# rotation review and merge Dependabot PRs that refresh these SHAs; see
+# CONTRIBUTING.md for the pinning policy.
+
 env:
   STELLAR_NETWORK: testnet
   STELLAR_RPC_URL: https://soroban-testnet.stellar.org
@@ -21,10 +28,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@6d653acede28d24f02e3cd7bfc695f644621a5a4 # stable
 
       - name: Check formatting
         run: cargo fmt --all --check
@@ -33,10 +40,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@6d653acede28d24f02e3cd7bfc695f644621a5a4 # stable
 
       - name: Install cargo-audit
         run: cargo install cargo-audit
@@ -49,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       # Detects unreviewed changes to the contract's public function
       # signatures (Issue #1147). See stellar-contracts/docs/abi-migrations.md
@@ -62,10 +69,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@6d653acede28d24f02e3cd7bfc695f644621a5a4 # stable
 
       - name: Install wasm32 target
         run: rustup target add wasm32-unknown-unknown
@@ -78,7 +85,7 @@ jobs:
         run: cargo tarpaulin --out Xml --timeout 300 --exclude-files tests/* --output-dir coverage
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@5ecb98a3c6b747ed38dc12a8f7ef13bd79982936 # v4.5.0
         with:
           files: ./stellar-contracts/coverage/cobertura.xml
           flags: stellar-contracts
@@ -88,10 +95,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@6d653acede28d24f02e3cd7bfc695f644621a5a4 # stable
 
       - name: Install wasm32 target
         run: rustup target add wasm32-unknown-unknown
@@ -132,10 +139,10 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@6d653acede28d24f02e3cd7bfc695f644621a5a4 # stable
 
       - name: Install wasm32 target
         run: rustup target add wasm32-unknown-unknown
@@ -184,7 +191,7 @@ jobs:
         run: echo "${{ steps.deploy.outputs.contract_id }}" > contract_id.txt
 
       - name: Upload contract ID artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: testnet-contract-id
           path: contract_id.txt
@@ -192,7 +199,7 @@ jobs:
 
       - name: Notify on deployment failure
         if: failure()
-        uses: actions/github-script@v7
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           script: |
             github.rest.issues.create({
