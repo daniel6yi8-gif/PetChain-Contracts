@@ -54,3 +54,8 @@ cargo test
 ## License
 
 MIT
+
+## Handsoff notes
+
+<!-- handsoff-issue-1227 -->
+- #1227: [backend-2fa] Enforce TOTP replay protection atomically
